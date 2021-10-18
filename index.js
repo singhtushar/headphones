@@ -4,6 +4,8 @@ const app = express();
 const nodemailer = require("nodemailer");
 const Customer = require("./Database/model");
 
+const PORT = process.env.PORT || 8000;
+
 const mongoose = require("mongoose");
 mongoose
   .connect(
@@ -114,6 +116,6 @@ app.post("/register", async (req, res) => {
   res.redirect("index.html");
 });
 
-app.listen(8000, () => {
-  console.log("Server listening on port 8000...");
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}...`);
 });
