@@ -1,12 +1,6 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
-    color: {
-      type: String,
-      trim: true,
-      required: true,
-      lowercase: true,
-    },
     email: {
       type: String,
       trim: true,

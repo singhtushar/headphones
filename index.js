@@ -30,8 +30,7 @@ app.use(express.static("public"));
 
 app.post("/register", async (req, res) => {
   const { email, color } = req.body;
-  console.log(email);
-  console.log(color);
+  // console.log(email);
 
   Customer.find().exec((err, user) => {
     const transporter = nodemailer.createTransport({
@@ -53,7 +52,6 @@ app.post("/register", async (req, res) => {
       const pid = user.length + 1;
       Customer.findOne({ email }).exec(async (err, user) => {
         if (user) {
-          user.color = color;
           await user.save(async (err) => {
             if (err) {
               return res.json({
@@ -64,7 +62,7 @@ app.post("/register", async (req, res) => {
                 from: `${process.env.EMAIL_ID}`,
                 to: `${email}`,
                 subject: "Beats Headphone",
-                html: `<h2>Your request for Beats Headphone colored ${color} is successfully updated</h2>
+                html: `<h2>Your request for Beats Headphone is successfully updated</h2>
                     <p style="color: red">Customer ID:  <strong>${user.pid}</strong></p>`,
               };
 
@@ -92,7 +90,7 @@ app.post("/register", async (req, res) => {
                 from: `${process.env.EMAIL_ID}`,
                 to: `${email}`,
                 subject: "Beats Headphone",
-                html: `<h2>Dear customer, Your request for Beats Headphones colored ${color} is successfull</h2>
+                html: `<h2>Dear customer, Your request for Beats Headphones is successfull</h2>
                     <p>Registration no. <strong>${user.pid}</strong></p>`,
               };
 
