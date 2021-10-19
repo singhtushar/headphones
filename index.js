@@ -29,8 +29,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
 app.post("/register", async (req, res) => {
-  const { email } = req.body;
+  const { email, color } = req.body;
   console.log(email);
+  console.log(color);
 
   Customer.find().exec((err, user) => {
     const transporter = nodemailer.createTransport({
@@ -52,6 +53,7 @@ app.post("/register", async (req, res) => {
       const pid = user.length + 1;
       Customer.findOne({ email }).exec(async (err, user) => {
         if (user) {
+          user.color = color;
           await user.save(async (err) => {
             if (err) {
               return res.json({
@@ -62,7 +64,7 @@ app.post("/register", async (req, res) => {
                 from: `${process.env.EMAIL_ID}`,
                 to: `${email}`,
                 subject: "Beats Headphone",
-                html: `<h2>Your request for Beats Headphone is successfully updated</h2>
+                html: `<h2>Your request for Beats Headphone colored ${color} is successfully updated</h2>
                     <p style="color: red">Customer ID:  <strong>${user.pid}</strong></p>`,
               };
 
@@ -80,7 +82,7 @@ app.post("/register", async (req, res) => {
             }
           });
         } else {
-          let user = new Customer({ email, pid });
+          let user = new Customer({ color, email, pid });
           await user.save((err, success) => {
             if (err) {
               console.log("error occured in while creating new user.");
@@ -90,7 +92,7 @@ app.post("/register", async (req, res) => {
                 from: `${process.env.EMAIL_ID}`,
                 to: `${email}`,
                 subject: "Beats Headphone",
-                html: `<h2>Dear customer, Your request for Beats Headphones is successfull</h2>
+                html: `<h2>Dear customer, Your request for Beats Headphones colored ${color} is successfull</h2>
                     <p>Registration no. <strong>${user.pid}</strong></p>`,
               };
 
